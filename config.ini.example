@@ -83,6 +83,16 @@ cakey = /tmp/ca.key
 # If your installation of certbot is in a different location, specify it here.
 #path = /usr/bin/certbot
 
+# ACME service URL to enable proxying of ACME Renewal Information
+#directory-url = https://acme-v02.api.letsencrypt.org/directory
+
+# ACME Renewal Information URL to allow specifying the URL directly
+#renewal-info-url = https://acme-v02.api.letsencrypt.org/acme/renewal-info
+
+# Proxy renewal requests? If false (default), will just return the upstream renewal-info-url directly
+# If true, will supply an internal endpoint to retrieve the upstream renewal info
+#renewal-info-proxy = true
+
 # Configuration to provide to certbot as it's config file. This example
 # configures certbot to use cloudflare's DNS (assumes credential file exists).
 # Note that certbot config must be indented when spanning multiple lines.

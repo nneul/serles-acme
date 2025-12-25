@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 class Backend(ABC):
     """ Abstract Base Backend
 
-    Inherit from this and implement ``sign()``, and optionally ``__init__()``
+    Inherit from this and implement ``sign()``, and optionally ``__init__()`` and ``renewal_info()``
     to use this.
     """
 
@@ -21,4 +21,8 @@ class Backend(ABC):
 
     @abstractmethod
     def sign(self, csr, subjectDN, subjectAltNames, email):
+        pass
+
+    @abstractmethod
+    def renewal_info(self, cert_id):
         pass

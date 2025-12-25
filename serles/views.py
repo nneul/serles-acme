@@ -15,7 +15,6 @@ from .exceptions import ACMEError
 
 api = Api()
 
-
 def init_config():
     c_init_config()
 
@@ -33,7 +32,7 @@ class Directory(Resource):
         """
         Displays the URLs for accessing certain functions, and some metadata.
         """
-        return {
+        directory = {
             "newNonce": api.url_for(NewNonce, _external=True),
             "newAccount": api.url_for(NewAccount, _external=True),
             "newOrder": api.url_for(NewOrder, _external=True),
@@ -42,6 +41,14 @@ class Directory(Resource):
             # "newAuthz": MUST be absent if pre-authorization not supported
             # optional: meta:{termsOfService"",website"",caaIdentities[""],externalAccountRequired?}
         }
+
+        # Only if backend supports it or has configured a direct URL to use
+        if config["renewalInfoURL"]:
+            directory["renewalInfo"] = config["renewalInfoURL"]
+        elif config["renewalInfo"]:
+            directory["renewalInfo"] = api.url_for(RenewalInfo, _external=True)
+
+        return directory
 
 
 @api.resource("/newNonce")  # RFC8555 §7.2

@@ -33,6 +33,8 @@ class Backend:
         self.path = "/usr/bin/certbot"
         self.config = None
         self.config_file = None
+        self.directory_url = None
+        self.renewal_info_url = None
 
         if "certbot" in config:
             if "path" in config["certbot"]:
@@ -41,10 +43,19 @@ class Backend:
                 self.config = config["certbot"]["config"]
             if "config-file" in config["certbot"]:
                 self.config_file = config["certbot"]["config-file"]
+            if "directory-url" in config["certbot"]:
+                self.directory_url = config["certbot"]["directory-url"]
+            if "renewal-info-url" in config["certbot"]:
+                self.renewal_info_url = config["certbot"]["renewal-info-url"]
 
         if self.config_file and self.config:
             raise Exception(
                 "cannot specify both certbot.config and certbot.config-file in config.ini"
+            )
+
+        if self.directory_url and self.renewal_info_url:
+            raise Exception(
+                "cannot specify both certbot.directory-url and certbot.renewal-info-url in config.ini"
             )
 
         if not self.config_file and not self.config:
@@ -60,6 +71,11 @@ class Backend:
 
         if not os.access(self.path, os.X_OK):
             raise Exception(f"certbot '{self.path}' not executable")
+
+    def renewal_info(self):
+        if self.renewal_info_url:
+            return self.renewal_info_url
+        return None
 
     def sign(self, csr, subjectDN, subjectAltNames, email):
         with tempfile.TemporaryDirectory(prefix="serles-certbot") as tmpdir:

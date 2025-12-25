@@ -128,4 +128,9 @@ def load_config_and_backend(filename):
     except ValueError:
         raise ConfigError("[serles]allowWildcards= must be 'true' or 'false'") from None
 
+    if not attr(backend, "renewal_info"):
+        config["renewalInfo"] = True
+    else:
+        config["renewalInfo"] = False
+
     return config, backend
